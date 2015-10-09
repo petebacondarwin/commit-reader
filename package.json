@@ -1,0 +1,13 @@
+{
+  "name": "contributors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scrape-git.js",
+  "scripts": {},
+  "author": "",
+  "dependencies": {
+    "q": "^1.4.1",
+    "request": "^2.64.0",
+    "request-promise": "^0.4.3"
+  }
+}
