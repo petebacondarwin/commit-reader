@@ -1,4 +1,4 @@
-angular.module('app', [])
+angular.module('app', ['ngAnimate'])
 
 .directive('committerApp', function() {
   return {
@@ -8,6 +8,7 @@ angular.module('app', [])
     controller: CommitterApp
   }
 });
+
 
 function CommitterApp($interval, $http) {
   this.$interval = $interval;
@@ -26,30 +27,54 @@ CommitterApp.prototype = {
     this.timer = null;
   },
   reset: function() {
-    this.commitIndex = 0;
+    this.commitIndex = -1;
     this.authorMap = {};
     this.authors = [];
   },
 
   next: function() {
+
+    if (!this.commits || this.commitIndex === this.commits.length) return;
+
     // Get the next commit
+    this.commitIndex++;
     var commit = this.commits[this.commitIndex];
 
     // If this is a new author then add to the map
-    if (!this.authorMap[commit.author]) {
+    if (angular.isUndefined(this.authorMap[commit.author])) {
       this.authorMap[commit.author] = this.authors.length;
     }
-    console.log('adding commit', commit, this.authorMap[commit.author]);
-    // Record this authors most recent commit
+
+    // Record this author's most recent commit
+    console.log('adding commit', commit, this.authorMap[commit.author], this.size(commit.count));
     this.authors[this.authorMap[commit.author]] = commit;
 
-    this.commitIndex++;
-    if (this.commitIndex === this.commits.length) {
+    if (this.commitIndex === this.commits.length-1) {
       this.stop();
     }
   },
 
+  prev: function() {
+    if (this.commitIndex == -1) return;
+
+    var commitToRemove = this.commits[this.commitIndex];
+    var authorIndex = this.authorMap[commitToRemove.author];
+
+    if (commitToRemove.count === 1) {
+      this.authors.splice(authorIndex, 1);
+
+      if (authorIndex !== this.authors.length) { throw new Error(); }
+    }
+
+    // Now update the relevant author for the previous commit
+    this.commitIndex--;
+    if (this.commitIndex > -1) {
+      var previousCommit = this.commits[this.commitIndex];
+      this.authors[this.authorMap[previousCommit.author]] = previousCommit;
+    }
+  },
+
   size: function(count) {
-    return Math.round(Math.log(count)) * 20;
+    return Math.round(Math.log(count)*10) + 10;
   }
 }

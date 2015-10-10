@@ -1,9 +1,13 @@
 <div>
-  <button ng-disabled="committerApp.timer" ng-click="committerApp.start()">Start</button>
-  <button ng-disabled="!committerApp.timer" ng-click="committerApp.stop()">Stop</button>
-  <button ng-disabled="!committerApp.commits || committerApp.commitIndex >= committerApp.commits.length" ng-click="committerApp.next()">Next</button>
-  <button ng-disabled="committerApp.commitIndex == 0" ng-click="committerApp.reset()">Reset</button>
-  <h2>Commit: {{committerApp.commitIndex}} - Date: {{committerApp.authors[committerApp.authors.length-1].date}}</h2>
-  <h1>Committers: {{committerApp.authors.length}}</h1>
-  <img ng-repeat="commit in committerApp.authors track by $index" ng-src="../images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}">
+  <div class="controls">
+    <button ng-disabled="committerApp.timer" ng-click="committerApp.start()">Start</button>
+    <button ng-disabled="!committerApp.timer" ng-click="committerApp.stop()">Stop</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex <= 0" ng-click="committerApp.prev()">Previous</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex >= committerApp.commits.length" ng-click="committerApp.next()">Next</button>
+    <button ng-disabled="committerApp.commitIndex == 0" ng-click="committerApp.reset()">Reset</button>
+  </div>
+  <div class="commit-info">Commit: {{committerApp.commitIndex}} - Date: {{committerApp.authors[committerApp.authors.length-1].date}} - Committers: {{committerApp.authors.length}}</div>
+  <div>
+    <img class="author" ng-repeat="commit in committerApp.authors | orderBy : '-count' track by commit.author" ng-src="../images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}" title="{{commit.author}}">
+  </div>
 </div>

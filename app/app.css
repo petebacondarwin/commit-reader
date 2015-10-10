@@ -1,0 +1,17 @@
+.author {
+  float: left;
+  margin: 1px;
+  border-radius: 5px;
+  transition: all linear 1s;
+}
+.author.ng-move.active,
+{
+  border: solid 2px red;
+}
+
+.author.ng-enter {
+  opacity:0;
+}
+.author.ng-enter.ng-enter-active {
+  opacity:1;
+}
