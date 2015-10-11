@@ -12,20 +12,20 @@ if (args.length !== 2) {
 }
 
 var commitFileName = args[0];
-var outputFile = args[2];
+var outputFile = args[1];
 
 var commitFileContents = fs.readFileSync(commitFileName, 'utf8');
 var commits = JSON.parse(commitFileContents);
 var loginCount = {};
 
-console.log(commits.length, 'commits loaded');
+console.log(commits.length, 'commits loaded from', commitFileName);
 
 commits = commits
 
   .reverse()
 
   .filter(function(commit) {
-    return commit.author;
+    return commit.author && !/^(docs|style)/.test(commit.commit.message);
   })
 
   .map(function(commit) {
@@ -38,5 +38,7 @@ commits = commits
       count: loginCount[login]
     };
   });
+
+console.log(commits.length, 'commits saved to', outputFile);
 
 fs.writeFileSync(path.resolve(outputFile), JSON.stringify(commits, null, 2));
