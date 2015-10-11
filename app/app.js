@@ -1,4 +1,4 @@
-angular.module('app', ['ngAnimate'])
+angular.module('app', [])
 
 .directive('committerApp', function() {
   return {
@@ -46,7 +46,7 @@ CommitterApp.prototype = {
     }
 
     // Record this author's most recent commit
-    console.log('adding commit', commit, this.authorMap[commit.author], this.size(commit.count));
+    // console.log('adding commit', commit, this.authorMap[commit.author], this.size(commit.count));
     this.authors[this.authorMap[commit.author]] = commit;
 
     if (this.commitIndex === this.commits.length-1) {
@@ -75,6 +75,6 @@ CommitterApp.prototype = {
   },
 
   size: function(count) {
-    return Math.round(Math.log(count)*10) + 10;
+    return Math.round(Math.log(count)*12) + 20;
   }
 }
