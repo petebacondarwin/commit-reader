@@ -30,10 +30,15 @@ commits.forEach(function(commit, index) {
       console.log('found', login, commit.author.avatar_url);
       promise = promise.then(function() {
         return Q.Promise(function(resolve, reject) {
-          console.log('requesting', login, commit.author.avatar_url, path.resolve(imageFolder, login + '.jpg'));
-          rp(commit.author.avatar_url)
-            .on('response', function() { resolve(true); })
-            .pipe(fs.createWriteStream(path.resolve(imageFolder, login + '.jpg')));
+          var imagePath = path.resolve(imageFolder, login + '.jpg');
+          if (fs.existsSync(imagePath)) {
+            resolve(true);
+          } else {
+            console.log('requesting', login, commit.author.avatar_url, imagePath);
+            rp(commit.author.avatar_url)
+              .on('response', function() { resolve(true); })
+              .pipe(fs.createWriteStream(path.resolve(imageFolder, login + '.jpg')));
+          }
         });
       });
     }
