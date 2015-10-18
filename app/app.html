@@ -7,7 +7,9 @@
     <button ng-disabled="committerApp.commitIndex == 0" ng-click="committerApp.reset()">Reset</button>
   </div>
   <div class="commit-info">Commit: {{committerApp.commitIndex}} - Date: {{committerApp.authors[committerApp.authors.length-1].date}} - Committers: {{committerApp.authors.length}}</div>
-  <div>
-    <img class="author" ng-repeat="commit in committerApp.authors track by commit.author" ng-src="images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}" title="{{::commit.author}}">
+  <div bubble-layout class="author-container">
+    <img class="author" ng-repeat="commit in committerApp.authors track by commit.author"
+         ng-src="images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}"
+         title="{{::commit.author}}">
   </div>
 </div>
