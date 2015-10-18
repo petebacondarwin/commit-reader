@@ -35,7 +35,8 @@ commits = commits
     return {
       date: commit.commit.committer.date.split('T')[0],
       author: commit.author.login,
-      count: loginCount[login]
+      count: loginCount[login],
+      commit: (commit.commit.message || '').split('\n')[0],
     };
   });
 
