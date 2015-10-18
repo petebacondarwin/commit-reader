@@ -38,6 +38,7 @@ CommitterApp.prototype = {
     this.timer = null;
   },
   reset: function () {
+    this.stop();
     this.commitIndex = -1;
     this.authorMap = {};
     this.authors = [];
@@ -45,7 +46,7 @@ CommitterApp.prototype = {
   },
 
   nextDate: function() {
-    if (!this.commits || this.commitIndex === this.commits.length) return;
+    if (!this.commits || this.commitIndex >= this.commits.length) return;
 
     if (this.currentDate) {
       // If we have a date then add one day to it
@@ -84,7 +85,7 @@ CommitterApp.prototype = {
 
   nextCommit: function () {
 
-    if (!this.commits || this.commitIndex === this.commits.length) return;
+    if (!this.commits || this.commitIndex >= this.commits.length) return;
 
     // Get the next commit
     this.commitIndex++;
