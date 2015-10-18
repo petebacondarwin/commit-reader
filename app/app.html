@@ -1,13 +1,19 @@
 <div>
   <div class="controls">
-    <button ng-disabled="committerApp.timer" ng-click="committerApp.start()">Start</button>
+    <button ng-disabled="committerApp.timer" ng-click="committerApp.startByDate()">Start by Date</button>
+    <button ng-disabled="committerApp.timer" ng-click="committerApp.startByCommit()">Start by Commits</button>
     <button ng-disabled="!committerApp.timer" ng-click="committerApp.stop()">Stop</button>
-    <button ng-disabled="!committerApp.commits || committerApp.commitIndex <= 0" ng-click="committerApp.prev()">Previous</button>
-    <button ng-disabled="!committerApp.commits || committerApp.commitIndex >= committerApp.commits.length" ng-click="committerApp.next()">Next</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex <= 0" ng-click="committerApp.prevDate()">Previous Date</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex <= 0" ng-click="committerApp.prevCommit()">Previous Commit</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex >= committerApp.commits.length" ng-click="committerApp.nextCommit()">Next Commit</button>
+    <button ng-disabled="!committerApp.commits || committerApp.commitIndex >= committerApp.commits.length" ng-click="committerApp.nextDate()">Next Date</button>
     <button ng-disabled="committerApp.commitIndex == 0" ng-click="committerApp.reset()">Reset</button>
   </div>
-  <div class="commit-info">Commit: {{committerApp.commitIndex}} - Date: {{committerApp.authors[committerApp.authors.length-1].date}} - Committers: {{committerApp.authors.length}}</div>
-  <div>
-    <img class="author" ng-repeat="commit in committerApp.authors track by commit.author" ng-src="images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}" title="{{::commit.author}}">
+  <div class="commit-info" ng-show="committerApp.commitIndex>=0">Commits: {{committerApp.commitIndex}} - Committers: {{committerApp.authors.length}}</div>
+  <div class="date-info">{{committerApp.currentDate | date}}</div>
+  <div bubble-layout="committerApp.commitIndex" class="author-container">
+    <img class="author" ng-repeat="commit in committerApp.authors track by commit.author"
+         ng-src="images/{{::commit.author}}.jpg" width="{{committerApp.size(commit.count)}}"
+         title="{{::commit.author}}">
   </div>
 </div>

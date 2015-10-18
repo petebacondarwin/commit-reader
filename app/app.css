@@ -1,5 +1,28 @@
+.author-container {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 .author {
-  display: inline-block;
-  margin: 1px;
-  /*border-radius: 5px;*/
+  position: absolute;
+}
+
+
+.commit-info {
+  font-size: xx-large;
+}
+
+.date-info {
+  width: 300px;
+  position: relative;
+  margin: 50px auto;
+  font-size: 34px;
+  color: yellow;
+  background-color: rgba(0,0,0,0.5);
+  text-align: center;
+  z-index: 100;
+  border-radius: 10px;
 }
