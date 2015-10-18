@@ -21,13 +21,17 @@ function CommitterApp($interval, $http) {
   this.$interval = $interval;
   var committerApp = this;
   $http.get('commits.json').then(function (response) {
+    committerApp.currentDate = null;
     committerApp.commits = response.data;
     committerApp.reset();
   });
 }
 CommitterApp.prototype = {
-  start: function () {
-    this.timer = this.$interval(this.next.bind(this), 10);
+  startByDate: function () {
+    this.timer = this.$interval(this.nextDate.bind(this), 20);
+  },
+  startByCommit: function () {
+    this.timer = this.$interval(this.nextCommit.bind(this), 10);
   },
   stop: function () {
     this.$interval.cancel(this.timer);
@@ -37,9 +41,48 @@ CommitterApp.prototype = {
     this.commitIndex = -1;
     this.authorMap = {};
     this.authors = [];
+    this.currentDate = null;
   },
 
-  next: function () {
+  nextDate: function() {
+    if (!this.commits || this.commitIndex === this.commits.length) return;
+
+    if (this.currentDate) {
+      // If we have a date then add one day to it
+      this.currentDate = new Date(this.currentDate.getTime() + 86400000);
+    }
+
+    do {
+      if (this.commitIndex === this.commits.length) return;
+      this.nextCommit();
+      var commitDate = new Date(this.commits[this.commitIndex].date);
+      if (!this.currentDate) {
+        // If we have no date yet then take the first one
+        this.currentDate = commitDate;
+      }
+    } while(commitDate < this.currentDate);
+  },
+
+  prevDate: function() {
+    if (!this.commits || this.commitIndex == -1) return;
+
+    if (this.currentDate) {
+      // If we have a date then take away one day from it
+      this.currentDate = new Date(this.currentDate.getTime() - 86400000);
+    }
+
+    do {
+      if (this.commitIndex == -1) return;
+      this.prevCommit();
+      var commitDate = new Date(this.commits[this.commitIndex].date);
+      if (!this.currentDate) {
+        // If we have no date yet then take the first one
+        this.currentDate = commitDate;
+      }
+    } while(commitDate > this.currentDate);
+  },
+
+  nextCommit: function () {
 
     if (!this.commits || this.commitIndex === this.commits.length) return;
 
@@ -61,7 +104,7 @@ CommitterApp.prototype = {
     }
   },
 
-  prev: function () {
+  prevCommit: function () {
     if (this.commitIndex == -1) return;
 
     var commitToRemove = this.commits[this.commitIndex];
@@ -88,7 +131,7 @@ CommitterApp.prototype = {
   }
 }
 
-function BubbleLayoutDirective(scope, element) {
+function BubbleLayoutDirective(scope, element, attr) {
   var dElement = d3.select(element[0]);
   var maxRadius = 50;
   var padding = 1.5;
@@ -108,7 +151,7 @@ function BubbleLayoutDirective(scope, element) {
   var images;
   var nodes;
 
-  scope.$watch(function () {
+  scope.$watch(attr.bubbleLayout, function () {
     images = dElement.selectAll('img');
     nodes = [];
     images.each(function (node, index) {

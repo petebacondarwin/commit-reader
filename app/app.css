@@ -9,3 +9,20 @@
 .author {
   position: absolute;
 }
+
+
+.commit-info {
+  font-size: xx-large;
+}
+
+.date-info {
+  width: 300px;
+  position: relative;
+  margin: 50px auto;
+  font-size: 34px;
+  color: yellow;
+  background-color: rgba(0,0,0,0.5);
+  text-align: center;
+  z-index: 100;
+  border-radius: 10px;
+}
