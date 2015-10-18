@@ -26,3 +26,8 @@
   z-index: 100;
   border-radius: 10px;
 }
+
+
+.music-credit {
+  float: right;
+}

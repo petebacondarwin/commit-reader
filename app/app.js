@@ -14,6 +14,14 @@ angular.module('app', [])
       restrict: 'A',
       link: BubbleLayoutDirective
     }
+  })
+
+
+  .directive('audio', function() {
+    return {
+      restrict: 'E',
+      link: AudioDirective
+    }
   });
 
 
@@ -215,4 +223,15 @@ function BubbleLayoutDirective(scope, element, attr) {
       });
     };
   }
+}
+
+
+function AudioDirective(scope, element, attrs) {
+  scope.$watch(attrs.playing, function(val) {
+    if (val === true) {
+      element[0].play();
+    } else {
+      element[0].pause();
+    }
+  })
 }
